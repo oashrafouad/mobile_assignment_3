@@ -39,11 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .of(context)
             .colorScheme
             .primary,
-        // change color of title
-        title: Text(widget.title, style: TextStyle(color: Theme
-            .of(context)
-            .colorScheme
-            .onPrimary)),
+        title: Text(widget.title, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
       ),
       body: Center(
         child: Padding(
