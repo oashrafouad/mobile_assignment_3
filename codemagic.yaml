@@ -27,3 +27,9 @@ workflows:
           zip -r ios_app.zip Runner.app
     artifacts:
       - ios/output/Build/Products/Debug-iphonesimulator/*.zip
+    publishing:
+      scripts:
+        - name: Publish App to Appetize
+          script: |
+            zipPath="ios/output/Build/Products/Debug-iphonesimulator/ios_app.zip"
+            echo $(curl --location --request POST "https://$API_TOKEN@api.appetize.io/v1/apps/$APP_PUBLIC_KEY" --form "file=@$zipPath")
