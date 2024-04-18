@@ -17,6 +17,7 @@ workflows:
           find . -name "Podfile" -execdir pod install \;
       - name: Flutter build ipa
         script: |
+          flutter build ios
           xcodebuild -workspace "ios/Runner.xcworkspace" \
             -scheme "Runner" \
             -configuration "Debug" \
