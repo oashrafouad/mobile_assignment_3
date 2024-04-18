@@ -17,12 +17,12 @@ workflows:
           find . -name "Podfile" -execdir pod install \;
       - name: Flutter build ipa
         script: |
-          flutter build ios --debug --no-codesign
-          cd build/ios/iphoneos/
-          mkdir Payload
-          mv Runner.app Payload
-          zip -r Payload.zip Payload
-          mv Payload.zip Runner.ipa
+          xcodebuild -workspace "ios/Runner.xcworkspace" \
+            -scheme "Runner" \
+            -configuration "Debug" \
+            -sdk iphonesimulator \
+            -derivedDataPath ios/output
+          cd ios/output/Build/Products/Debug-iphonesimulator
+          zip -r ios_app.zip Runner.app
     artifacts:
-      - build/ios/iphoneos/*.ipa
-      - build/ios/iphoneos/Payload/*.app
+      - ios/output/Build/Products/Debug-iphonesimulator/*.zip
