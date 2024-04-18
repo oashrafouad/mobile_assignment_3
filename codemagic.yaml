@@ -3,6 +3,8 @@ workflows:
     name: iOS Workflow
     environment:
       flutter: stable
+      groups:
+        - appetize_credentials
     scripts:
       - name: Set up code signing settings on Xcode project
         script: |
@@ -15,7 +17,7 @@ workflows:
           find . -name "Podfile" -execdir pod install \;
       - name: Flutter build ipa
         script: |
-          flutter build ios --release --no-codesign
+          flutter build ios --no-codesign
           cd build/ios/iphoneos/
           mkdir Payload
           mv Runner.app Payload
@@ -23,3 +25,4 @@ workflows:
           mv Payload.zip Runner.ipa
     artifacts:
       - build/ios/iphoneos/*.ipa
+      - build/ios/iphoneos/*.zip
