@@ -5,6 +5,7 @@ workflows:
       flutter: stable
       groups:
         - appetize_credentials
+        - firebase_credentials
     scripts:
       - name: Set up code signing settings on Xcode project
         script: |
@@ -25,11 +26,26 @@ workflows:
             -derivedDataPath ios/output
           cd ios/output/Build/Products/Debug-iphonesimulator
           zip -r ios_app.zip Runner.app
+      - flutter packages pub get
+      - flutter config --enable-web
+      - name: Build Web
+        script: |
+          flutter build web --release
+          cd build/web
+          7z a -r ../web.zip ./*
     artifacts:
       - ios/output/Build/Products/Debug-iphonesimulator/*.zip
+      - build/web.zip
+      - flutter_drive.log
     publishing:
       scripts:
         - name: Publish App to Appetize
           script: |
             zipPath="ios/output/Build/Products/Debug-iphonesimulator/ios_app.zip"
             echo $(curl --location --request POST "https://$APPETIZE_API_TOKEN@api.appetize.io/v1/apps/$APPETIZE_APP_PUBLIC_KEY" --form "file=@$zipPath")
+        - name: Publish to Firebase Hosting
+          script: firebase deploy --token "$FIREBASE_TOKEN"
+      email:
+        recipients:
+          - amourakora2001@gmail.com
+
